@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M-Pesa Replica</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background: #f5f5f5;
+      color: #333;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #1b8f2b;
+    }
+    .screen {
+      display: none;
+    }
+    .active {
+      display: block;
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #1b8f2b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .menu button {
+      margin-bottom: 10px;
+    }
+    .confirmation {
+      text-align: center;
+      margin-top: 20px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="screen active">
+      <h2>Enter M-PESA PIN</h2>
+      <div class="input-group">
+        <label for="pin">PIN:</label>
+        <input type="password" id="pin" maxlength="4">
+      </div>
+      <button onclick="login()">Login</button>
+    </div><!-- Main Menu -->
+<div id="menuScreen" class="screen">
+  <h2>M-PESA</h2>
+  <div class="menu">
+    <button onclick="showScreen('sendMoneyScreen')">Send Money</button>
+    <button onclick="showScreen('withdrawScreen')">Withdraw</button>
+    <button onclick="checkBalance()">Check Balance</button>
+  </div>
+</div>
+
+<!-- Send Money -->
+<div id="sendMoneyScreen" class="screen">
+  <h2>Send Money</h2>
+  <div class="input-group">
+    <label for="phone">Phone Number:</label>
+    <input type="text" id="phone">
+  </div>
+  <div class="input-group">
+    <label for="amount">Amount:</label>
+    <input type="number" id="amount">
+  </div>
+  <button onclick="sendMoney()">Send</button>
+  <div class="confirmation" id="sendConfirm"></div>
+</div>
+
+<!-- Withdraw -->
+<div id="withdrawScreen" class="screen">
+  <h2>Withdraw</h2>
+  <div class="input-group">
+    <label for="agent">Agent Number:</label>
+    <input type="text" id="agent">
+  </div>
+  <div class="input-group">
+    <label for="withdrawAmount">Amount:</label>
+    <input type="number" id="withdrawAmount">
+  </div>
+  <button onclick="withdraw()">Withdraw</button>
+  <div class="confirmation" id="withdrawConfirm"></div>
+</div>
+
+  </div>  <script>
+    let balance = 5000;
+
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    function login() {
+      const pin = document.getElementById('pin').value;
+      if (pin === '1234') {
+        showScreen('menuScreen');
+      } else {
+        alert('Wrong PIN');
+      }
+    }
+
+    function sendMoney() {
+      const phone = document.getElementById('phone').value;
+      const amount = parseFloat(document.getElementById('amount').value);
+      if (phone && amount > 0 && amount <= balance) {
+        balance -= amount;
+        document.getElementById('sendConfirm').textContent = `Ksh ${amount} sent to ${phone}.`;
+      } else {
+        alert('Invalid input or insufficient balance.');
+      }
+    }
+
+    function withdraw() {
+      const agent = document.getElementById('agent').value;
+      const amount = parseFloat(document.getElementById('withdrawAmount').value);
+      if (agent && amount > 0 && amount <= balance) {
+        balance -= amount;
+        document.getElementById('withdrawConfirm').textContent = `Ksh ${amount} withdrawn via Agent ${agent}.`;
+      } else {
+        alert('Invalid input or insufficient balance.');
+      }
+    }
+
+    function checkBalance() {
+      alert(`Your balance is Ksh ${balance}`);
+    }
+  </script></body>
+</html>
